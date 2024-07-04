@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .god{
+            justify-content: center;
+        }
+    </style>
+    <script>
+        function dropHandelVid(event){
+            event.preventDefault();
+            console.log(event.dataTransfer.files);
+            window.vid = event.dataTransfer.files[0];
+            document.getElementById('vid').innerHTML = `<p class="text-gray-400 text-center">
+            ${window.vid.name}<br>
+            ${window.vid.size} bytes
+                </p>`
+        }
+        function dropHandelAud(event){
+            event.preventDefault();
+            console.log(event.dataTransfer.files);
+            window.aud = event.dataTransfer.files[0];
+            document.getElementById('aud').innerHTML = `<p class="text-gray-400 text-center">
+            ${window.aud.name}<br>
+            ${window.aud.size} bytes
+                </p>`
+        }
+        function askForVid(event){
+            event.preventDefault();
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'video/*';
+            input.onchange = (e) => {
+                window.vid = e.target.files[0];
+                document.getElementById('vid').innerHTML = `<p class="text-gray-400 text-center">
+            ${window.vid.name}<br>
+            ${window.vid.size/1e6} MB
+                </p>`
+            }
+            input.click();
+        }
+        function askForAud(event){
+            event.preventDefault();
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'audio/*';
+            input.onchange = (e) => {
+                window.aud = e.target.files[0];
+                document.getElementById('aud').innerHTML = `<p class="text-gray-400 text-center">
+            ${window.aud.name}<br>
+            ${window.aud.size/1e6} MB
+                </p>`
+            }
+            input.click();
+        }
+        
+        function submit(){
+            if(!window.vid || !window.aud){
+                alert('Please upload both video and audio');
+                return;
+            }
+            const form=document.createElement('form');
+            form.method='POST';
+            form.action='/process';
+            form.enctype='multipart/form-data';
+            const vidInput = document.createElement('input');
+            vidInput.type='file';
+            vidInput.name='video';
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(window.vid);
+            vidInput.files = dataTransfer.files;
+
+            form.appendChild(vidInput);
+            const audInput = document.createElement('input');
+            audInput.type='file';
+            audInput.name='audio';
+            const dataTransfer2 = new DataTransfer();
+            dataTransfer2.items.add(window.vid);
+            audInput.files = dataTransfer2.files;
+            form.appendChild(audInput);
+            const modelInput = document.createElement('input');
+            modelInput.type='text';
+            modelInput.name='model';
+            modelInput.value = document.getElementById('model').value;
+            form.appendChild(modelInput);
+            document.body.appendChild(form);
+            form.submit();
+
+            // by form and opening the returned video
+            // const form = new FormData();
+            // form.append('video', window.vid);
+            // form.append('audio', window.aud);
+            // form.append('model', document.getElementById('model').value);
+            // fetch('/process', {
+            //     method: 'POST',
+            //     body: form
+            // }).then(res => res.blob()).then(blob => {
+            //     const url = URL.createObjectURL(blob);
+            //     //download
+            //     const a = document.createElement('a');
+            //     a.href = url;
+            //     a.download = 'output.mp4';
+            //     a.click();
+            //     window.open(url);
+            // });
+        }
+    </script>
+    <title>Zee Ai</title>
+</head>
+<body>
+    <!--
+// v0 by Vercel.
+// https://v0.dev/t/3fJP1cFq7gJ
+-->
+
+<div class="flex items-center justify-center min-h-screen bg-gray-900">
+    <div class="w-full max-w-2xl p-6 bg-gray-800 rounded-lg shadow-lg">
+      <h1 class="mb-6 text-2xl font-bold text-white">Lip sync any video to any audio in any language</h1>
+      <div class="space-y-6">
+        <div>
+          <h2 class="mb-2 text-lg font-semibold text-white">Upload a video</h2>
+          <div class="flex god items-center space-x-4">
+            <button onclick="askForVid(event)" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full max-w-xs bg-blue-600">
+              Upload
+            </button>
+            
+          </div>
+          <div id="vid" ondragstart="dropHandelVid(event)" class="mt-4 p-4 border border-dashed border-gray-600 rounded-lg">
+            <p class="text-gray-400 text-center">Drag and drop a video or click to browse your files</p>
+            <div class="flex justify-center mt-4">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="w-8 h-8 text-gray-400"
+              >
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" x2="12" y1="3" y2="15"></line>
+              </svg>
+            </div>
+            <p class="mt-2 text-sm text-center text-gray-500">Drag and drop video file(s) here</p>
+            <p class="mt-2 text-xs text-center text-gray-500">requirements</p>
+          </div>
+        </div>
+        <div>
+          <h2 class="mb-2 text-lg font-semibold text-white">Upload an audio</h2>
+          <div class="flex god items-center space-x-4">
+            <button onclick="askForAud(event)" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full max-w-xs bg-blue-600">
+              Upload
+            </button>
+            
+          </div>
+          <div id="aud" ondrop="dropHandelAud(event)" class="mt-4 p-4 border border-dashed border-gray-600 rounded-lg">
+            <p class="text-gray-400 text-center">Drag and drop an audio or click to browse your files</p>
+            <div class="flex justify-center mt-4">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="w-8 h-8 text-gray-400"
+              >
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" x2="12" y1="3" y2="15"></line>
+              </svg>
+            </div>
+            <p class="mt-2 text-sm text-center text-gray-500">Drag and drop audio file(s) here</p>
+            <p class="mt-2 text-xs text-center text-gray-500">requirements</p>
+          </div>
+        </div>
+        <div>
+          <label for="model" class="block mb-2 text-sm font-medium text-white">
+            Model
+          </label>
+          <select id="model" class="w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-white">
+            <option value="Wav2lip">Wav2lip</option>
+          </select>
+        </div>
+        <button onclick="submit()" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full max-w-xs bg-blue-600">
+            Submit
+          </button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
