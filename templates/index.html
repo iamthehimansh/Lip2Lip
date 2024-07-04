@@ -85,7 +85,12 @@
             modelInput.type='text';
             modelInput.name='model';
             modelInput.value = document.getElementById('model').value;
+            
             form.appendChild(modelInput);
+            const textInput = document.createElement('input');
+            textInput.type='text';
+            textInput.name='text';
+            textInput.value = document.getElementById('text').value;
             document.body.appendChild(form);
             form.submit();
 
@@ -191,6 +196,12 @@
           <select id="model" class="w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-white">
             <option value="Wav2lip">Wav2lip</option>
           </select>
+        </div>
+        <div>
+          <label for="message" class="block mb-2 text-sm font-medium text-white">
+            Message
+          </label>
+          <textarea id="text" class="w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-white" rows="4"></textarea>
         </div>
         <button onclick="submit()" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full max-w-xs bg-blue-600">
             Submit
