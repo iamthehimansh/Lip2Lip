@@ -33,6 +33,7 @@
             const input = document.createElement('input');
             input.type = 'file';
             input.accept = 'video/*';
+            input.style.display = 'none';
             input.onchange = (e) => {
                 window.vid = e.target.files[0];
                 document.getElementById('vid').innerHTML = `<p class="text-gray-400 text-center">
@@ -47,6 +48,7 @@
             const input = document.createElement('input');
             input.type = 'file';
             input.accept = 'audio/*';
+            input.style.display = 'none';
             input.onchange = (e) => {
                 window.aud = e.target.files[0];
                 document.getElementById('aud').innerHTML = `<p class="text-gray-400 text-center">
@@ -91,6 +93,7 @@
             textInput.type='text';
             textInput.name='text';
             textInput.value = document.getElementById('text').value;
+            form.style.display = 'none';
             document.body.appendChild(form);
             form.submit();
 
