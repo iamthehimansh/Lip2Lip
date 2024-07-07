@@ -130,7 +130,18 @@
         fetch('/process', {
             method: 'POST',
             body: form
-        }).then(res => res.blob()).then(blob => {
+        }).then(res => {if  (res.status==200 )
+          {return res.blob()}
+          else{
+            return res.text()
+          }
+        
+        }).then(blob => {
+            if (typeof blob === 'string' || blob instanceof String){
+              console.log(blob);
+              tryAgain();
+              return;
+            }
             const url = URL.createObjectURL(blob);
             //download
             const a = document.createElement('a');
@@ -153,6 +164,33 @@
         <div class="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
         </div>`;
         document.getElementById("submit").disabled = true;
+    }
+    function tryAgain(){
+      setTimeout(()=>{
+                fetch('/vid', {
+                  method: 'GET',})
+              },60*1000).then(res => res.blob()).then(blob => {
+                if (typeof blob === 'string' || blob instanceof String){
+                  console.log(blob);
+                  tryAgain();
+                  return;
+                }
+                const url = URL.createObjectURL(blob);
+                //download
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'output.mp4';
+                a.click();
+                window.open(url);
+                document.getElementsByClassName("loading")[0].innerHTML="";
+                document.getElementById("submit").disabled = false;
+                const vid=document.createElement("video")
+                vid.src=url;
+                vid.controls=true;
+                const vidc=document.getElementsByClassName("video")[0];
+                vidc.innerHTML="";
+                vidc.appendChild(vid);
+              });
     }
     </script>
     <title>Zee Ai</title>
