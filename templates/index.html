@@ -125,8 +125,8 @@
         const form = new FormData();
         form.append('video', window.vid);
         form.append('audio', window.aud);
-        form.append('quality', document.getElementById('model').value);
-        form.append('text', document.getElementById('Quality').value);
+        form.append('quality', document.getElementById('Quality').value);
+        form.append('text', document.getElementById('text').value);
         fetch('/process', {
             method: 'POST',
             body: form
