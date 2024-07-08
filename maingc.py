@@ -40,7 +40,7 @@ def index():
 def vid():
     if genrated:
         genrated=False
-        return send_from_directory('/content', 'output_high_qual_hi.mp4'),200
+        return send_from_directory('/content', 'output_high_qual_hi.mp4',conditional=False),200
     else:
         return "Not Generated Yet",200
     

@@ -157,6 +157,8 @@
             const vidc=document.getElementsByClassName("video")[0];
             vidc.innerHTML="";
             vidc.appendChild(vid);
+        }).catch(err => {
+          tryAgain();
         });
         // show loading and disable submit
 
@@ -165,8 +167,12 @@
         </div>`;
         document.getElementById("submit").disabled = true;
     }
+    async function afterXsecRun(func,time){
+      await new Promise(r => setTimeout(r, time));
+      func();
+    }
     function tryAgain(){
-      setTimeout(()=>{
+      afterXsecRun(()=>{
                 fetch('/vid', {
                   method: 'GET',})
               },60*1000).then(res => res.blob()).then(blob => {
