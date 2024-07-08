@@ -11,18 +11,17 @@ from TTS.api import TTS
 import torch
 app = Flask(__name__)
 import threading
-
-PORT=5005
+PORT=80
 # import requests
 # response = requests.get('https://raw.githubuser/content.com/iamthehimansh/Lip2Lip/main/templates/index.html')
 # os.makedirs('templates', exist_ok=True)
 # with open('templates/index.html', 'w') as f:
 #     f.write(response.text)
-def func():
+# def func():
     
-    cmd=f'ssh -o "StrictHostKeyChecking=no" -R 80:localhost:{PORT} serveo.net'
-    subprocess.run(cmd, shell=True)
-threading.Thread(target=func,daemon=True).start()
+#     cmd=f'ssh -o "StrictHostKeyChecking=no" -R 80:localhost:{PORT} serveo.net'
+#     subprocess.run(cmd, shell=True)
+# threading.Thread(target=func,daemon=True).start()
 # Set the upload folder for video and audio files
 app.config['UPLOAD_FOLDER'] = 'uploads'
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
@@ -39,8 +38,7 @@ def index():
     return render_template('index.html')
 @app.route('/vid')
 def vid():
-    if genrated:
-        genrated=False
+    if os.path.exists("/content/output_high_qual_hi.mp4"):
         return send_from_directory('/content', 'output_high_qual_hi.mp4',conditional=False),200
     else:
         return "Not Generated Yet",200
@@ -106,7 +104,7 @@ def generate_video_function(video_path, audio_path_, text_,quality="low"):
 
     torch.cuda.empty_cache()
     if quality == "low":
-        cmd="cd /content/Wav2Lip &&"
+        cmd="cd /content/Wav2Lip && "
 
         #This is the detection box padding, if you see it doesnt sit quite right, just adjust the values a bit. Usually the bottom one is the biggest issue
         pad_top =  0
