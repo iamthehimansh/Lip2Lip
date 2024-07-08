@@ -105,7 +105,7 @@ def generate_video_function(video_path, audio_path_, text_,quality="low"):
 
     torch.cuda.empty_cache()
     if quality == "low":
-        cmd="cd /content/Wav2Lip "
+        cmd="cd /content/Wav2Lip &&"
 
         #This is the detection box padding, if you see it doesnt sit quite right, just adjust the values a bit. Usually the bottom one is the biggest issue
         pad_top =  0
@@ -116,7 +116,7 @@ def generate_video_function(video_path, audio_path_, text_,quality="low"):
 
         video_path_fix = f"'../{resized_video_path}'"
         subprocess.run(cmd, shell=True)
-        cmd=f"python inference.py --checkpoint_path 'checkpoints/wav2lip_gan.pth' --face {video_path_fix} --audio '/content/output_synth_audio_final.wav' --pads {pad_top} {pad_bottom} {pad_left} {pad_right} --resize_factor {rescaleFactor} --nosmooth --outfile '/content/output_high_qual_hi.mp4'"
+        cmd+=f"python inference.py --checkpoint_path 'checkpoints/wav2lip_gan.pth' --face {video_path_fix} --audio '/content/output_synth_audio_final.wav' --pads {pad_top} {pad_bottom} {pad_left} {pad_right} --resize_factor {rescaleFactor} --nosmooth --outfile '/content/output_high_qual_hi.mp4'"
         # f"python inference.py --checkpoint_path 'checkpoints/wav2lip_gan.pth' --face /content/uploads/VID-20240601-WA0039.mp4 --audio '/content/output_synth_audio_final.wav' --pads 0 15 0 0 --resize_factor 1 --nosmooth --outfile '/content/output_high_qual_hi.mp4'"
         subprocess.run(cmd, shell=True)
     else:
