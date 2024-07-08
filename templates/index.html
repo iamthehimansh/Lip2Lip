@@ -169,13 +169,13 @@
     }
     async function afterXsecRun(func,time){
       await new Promise(r => setTimeout(r, time));
-      func();
+      return func();
     }
     function tryAgain(){
-      afterXsecRun(()=>{
+      afterXsecRun(()=>
                 fetch('/vid', {
                   method: 'GET',})
-              },60*1000).then(res => res.blob()).then(blob => {
+              ,1000).then(res => res.blob()).then(blob => {
                 if (typeof blob === 'string' || blob instanceof String){
                   console.log(blob);
                   tryAgain();
@@ -197,8 +197,7 @@
                 vidc.innerHTML="";
                 vidc.appendChild(vid);
               });
-    }
-    </script>
+    }</script>
     <title>Zee Ai</title>
 </head>
 <body style="
